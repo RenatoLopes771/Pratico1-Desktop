@@ -8,6 +8,6 @@ package models;
  *
  * @author jogos
  */
-public class Funcionario {
-    
+public class Funcionario extends BasePessoa {
+
 }

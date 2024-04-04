@@ -8,6 +8,6 @@ package models;
  *
  * @author jogos
  */
-public class Cliente {
-    
+public class Cliente extends BasePessoa {
+
 }

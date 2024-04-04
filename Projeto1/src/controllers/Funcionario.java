@@ -8,6 +8,6 @@ package controllers;
  *
  * @author jogos
  */
-public class Funcionario extends BasePessoa {
+public class Funcionario {
 
 }

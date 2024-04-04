@@ -2,15 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package controllers;
+package models;
 
 /**
  *
- * @author jogos
+ * @author Usuario
  */
-public abstract class BasePessoa {
+public class BasePessoa {
 
-    protected int ID; 
+    protected int ID;
     protected String nome;
     protected String email;
 
@@ -43,5 +43,4 @@ public abstract class BasePessoa {
     public void setEmail(String email) {
         this.email = email;
     }
-
 }

@@ -4,7 +4,7 @@
  */
 package main;
 
-import controllers.Cliente;
+import models.Cliente;
 
 /**
  *
@@ -17,10 +17,10 @@ public class ClasseMain {
      */
     public static void main(String[] args) {
         System.out.println("Teste");
-        
+
         Cliente cliente = new Cliente();
-        
+
         System.out.println(cliente.getNome());
     }
-    
+
 }
