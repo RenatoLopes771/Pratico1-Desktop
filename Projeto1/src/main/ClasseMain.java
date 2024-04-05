@@ -4,7 +4,8 @@
  */
 package main;
 
-import models.Cliente;
+import java.util.ArrayList;
+import views.EscolherArquivo;
 
 /**
  *
@@ -16,11 +17,20 @@ public class ClasseMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Teste");
+        String DEBUG = "user.home\\Documents\\Programação Dekstop\\Pratico1-Desktop";
 
-        Cliente cliente = new Cliente();
+        ArrayList<String> teste = new ArrayList<String>();
 
-        System.out.println(cliente.getNome());
+        try {
+            EscolherArquivo obj = new EscolherArquivo(DEBUG);
+            teste = obj.LerArquivo();
+        } catch (Exception e) {
+            System.out.println("Teste");
+        }
+
+        teste.forEach((e) -> {
+            System.out.println(e);
+        });
     }
 
 }

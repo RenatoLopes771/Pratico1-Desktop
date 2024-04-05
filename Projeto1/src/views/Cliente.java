@@ -4,17 +4,40 @@
  */
 package views;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author jogos
  */
 public class Cliente extends javax.swing.JFrame {
     
+    private final controllers.Cliente clienteController;
+    private ArrayList<String> listaClientes;
+
     /**
      * Creates new form Cliente
      */
     public Cliente() {
+        clienteController = new controllers.Cliente();
+        listaClientes = new ArrayList<String>();
         initComponents();
+    }
+    
+    private void pegarTabela() {
+        
+    }
+    
+    private void inserirTabela() {
+        
+    }
+    
+    private void exportar() {
+        
+    }
+    
+    private void importar() {
+        
     }
 
     /**
@@ -184,11 +207,11 @@ public class Cliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonAdicionarMouseClicked
 
     private void jButtonExportarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonExportarMouseClicked
-        // TODO add your handling code here:
+        exportar();
     }//GEN-LAST:event_jButtonExportarMouseClicked
 
     private void jButtonImportarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonImportarMouseClicked
-        // TODO add your handling code here:
+        importar();
     }//GEN-LAST:event_jButtonImportarMouseClicked
 
     /**
