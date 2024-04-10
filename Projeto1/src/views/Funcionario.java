@@ -11,21 +11,21 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author jogos
  */
-public class Cliente extends javax.swing.JFrame {
+public class Funcionario extends javax.swing.JFrame {
 
-    private final controllers.Cliente clienteController;
+    private final controllers.Funcionario funcionarioController;
     DefaultTableModel jTableModel;
 
     /**
-     * Creates new form Cliente
+     * Creates new form Funcionario
      */
-    public Cliente() {
-        clienteController = new controllers.Cliente();
+    public Funcionario() {
+        funcionarioController = new controllers.Funcionario();
 
         jTableModel = new DefaultTableModel();
-        jTableModel.addColumn(clienteController.getCol1());
-        jTableModel.addColumn(clienteController.getCol2());
-        jTableModel.addColumn(clienteController.getCol3());
+        jTableModel.addColumn(funcionarioController.getCol1());
+        jTableModel.addColumn(funcionarioController.getCol2());
+        jTableModel.addColumn(funcionarioController.getCol3());
 
         initComponents();
     }
@@ -45,13 +45,13 @@ public class Cliente extends javax.swing.JFrame {
     }
 
     private void exportar() {
-        ArrayList<models.Cliente> conteudo = new ArrayList<models.Cliente>();
+        ArrayList<models.Funcionario> conteudo = new ArrayList<models.Funcionario>();
 
         for (int x = 0; x < jTableModel.getRowCount(); x++) {
-            models.Cliente cliente = new models.Cliente();
+            models.Funcionario funcionario = new models.Funcionario();
 
             try {
-                cliente.setID(
+                funcionario.setID(
                         Integer.parseInt(
                                 "" + jTableModel.getValueAt(x, 0)
                         )
@@ -63,19 +63,19 @@ public class Cliente extends javax.swing.JFrame {
                 return;
             }
 
-            cliente.setNome("" + jTableModel.getValueAt(x, 1));
-            cliente.setEmail("" + jTableModel.getValueAt(x, 2));
+            funcionario.setNome("" + jTableModel.getValueAt(x, 1));
+            funcionario.setEmail("" + jTableModel.getValueAt(x, 2));
 
-            conteudo.add(cliente);
+            conteudo.add(funcionario);
         }
 
-        clienteController.exportar(conteudo);
+        funcionarioController.exportar(conteudo);
     }
 
     private void importar() {
-        ArrayList<models.Cliente> importar = new ArrayList<models.Cliente>();
+        ArrayList<models.Funcionario> importar = new ArrayList<models.Funcionario>();
 
-        importar = clienteController.importar();
+        importar = funcionarioController.importar();
 
         if (importar == null) {
             return;
@@ -84,11 +84,11 @@ public class Cliente extends javax.swing.JFrame {
         int linha = 0;
         this.clearjTable();
 
-        for (models.Cliente cliente : importar) {
+        for (models.Funcionario funcionario : importar) {
             adicionarItem(
-                    cliente.getID(),
-                    cliente.getNome(),
-                    cliente.getEmail()
+                    funcionario.getID(),
+                    funcionario.getNome(),
+                    funcionario.getEmail()
             );
         }
     }
@@ -251,20 +251,21 @@ public class Cliente extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Cliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Funcionario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Cliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Funcionario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Cliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Funcionario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Cliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Funcionario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Cliente().setVisible(true);
+                new Funcionario().setVisible(true);
             }
         });
     }

@@ -21,7 +21,11 @@ public class Cliente {
     private final int EMAIL_INDEX = 2;
     
     public Cliente() {
-        fileController = new FileController("user.home\\Documents\\Programação Dekstop\\Pratico1-Desktop"); // #TODO DEBUG
+        this.fileController = new FileController("user.home\\Documents\\Programação Dekstop\\Pratico1-Desktop"); // #TODO DEBUG
+    }
+    
+    public Cliente(String path) {
+        this.fileController = new FileController(path);
     }
     
     public ArrayList<models.Cliente> importar() {

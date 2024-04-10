@@ -26,6 +26,10 @@ public class Janelas extends javax.swing.JFrame {
     }
     
     private void funcionarios() {
+        Funcionario funcionario = new Funcionario();
+        
+        funcionario.setVisible(true);
+        
         this.dispose();
     }
     
