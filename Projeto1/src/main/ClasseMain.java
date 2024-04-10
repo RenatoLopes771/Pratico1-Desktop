@@ -4,8 +4,7 @@
  */
 package main;
 
-import java.util.ArrayList;
-import views.EscolherArquivo;
+import views.Janelas;
 
 /**
  *
@@ -17,20 +16,9 @@ public class ClasseMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String DEBUG = "user.home\\Documents\\Programação Dekstop\\Pratico1-Desktop";
+        Janelas janela = new Janelas();
 
-        ArrayList<String> teste = new ArrayList<String>();
-
-        try {
-            EscolherArquivo obj = new EscolherArquivo(DEBUG);
-            teste = obj.LerArquivo();
-        } catch (Exception e) {
-            System.out.println("Teste");
-        }
-
-        teste.forEach((e) -> {
-            System.out.println(e);
-        });
+        janela.setVisible(true);
     }
 
 }

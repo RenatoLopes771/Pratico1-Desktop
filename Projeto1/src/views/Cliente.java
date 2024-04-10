@@ -5,39 +5,116 @@
 package views;
 
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author jogos
  */
 public class Cliente extends javax.swing.JFrame {
-    
+
     private final controllers.Cliente clienteController;
-    private ArrayList<String> listaClientes;
+    DefaultTableModel jTableModel;
 
     /**
      * Creates new form Cliente
      */
     public Cliente() {
         clienteController = new controllers.Cliente();
-        listaClientes = new ArrayList<String>();
+
+        jTableModel = new DefaultTableModel();
+        jTableModel.addColumn(clienteController.getCol1());
+        jTableModel.addColumn(clienteController.getCol2());
+        jTableModel.addColumn(clienteController.getCol3());
+
         initComponents();
     }
-    
-    private void pegarTabela() {
-        
+
+    private void clearjTable() {
+        while (jTableModel.getRowCount() > 0) {
+            jTableModel.removeRow(0);
+        }
     }
-    
-    private void inserirTabela() {
-        
+
+    private void adicionarItem(int ID, String nome, String email) {
+        jTableModel.addRow(new Object[]{
+            ID,
+            nome,
+            email
+        });
     }
-    
+
     private void exportar() {
-        
+        ArrayList<models.Cliente> conteudo = new ArrayList<models.Cliente>();
+
+        for (int x = 0; x < jTableModel.getRowCount(); x++) {
+            models.Cliente cliente = new models.Cliente();
+
+            try {
+                cliente.setID(
+                        Integer.parseInt(
+                                "" + jTableModel.getValueAt(x, 0)
+                        )
+                );
+            } catch (Exception e) {
+                ErroPrompt.gerar(
+                        "Erro: ID inválido\nID: " + jTableModel.getValueAt(x, 0) + "\nPosição: " + (x + 1)
+                );
+                return;
+            }
+
+            cliente.setNome("" + jTableModel.getValueAt(x, 1));
+            cliente.setEmail("" + jTableModel.getValueAt(x, 2));
+
+            conteudo.add(cliente);
+        }
+
+        clienteController.exportar(conteudo);
     }
-    
+
     private void importar() {
-        
+        ArrayList<models.Cliente> importar = new ArrayList<models.Cliente>();
+
+        importar = clienteController.importar();
+
+        if (importar == null) {
+            return;
+        }
+
+        int linha = 0;
+        this.clearjTable();
+
+        for (models.Cliente cliente : importar) {
+            adicionarItem(
+                    cliente.getID(),
+                    cliente.getNome(),
+                    cliente.getEmail()
+            );
+        }
+    }
+
+    private void deletar() {
+        int index = jTable.getSelectedRow();
+
+        if (index == -1) {
+            ErroPrompt.gerar("Selecione um para deletar");
+            return;
+        }
+
+        jTableModel.removeRow(index);
+    }
+
+    private void adicionar() {
+        try {
+            int ID = Integer.parseInt(jTextField1.getText());
+            String nome = jTextField2.getText();
+            String email = jTextField3.getText();
+
+            adicionarItem(ID, nome, email);
+        } catch (Exception e) {
+            ErroPrompt.gerar("Erro: valor ID inválido");
+            return;
+        }
     }
 
     /**
@@ -51,66 +128,23 @@ public class Cliente extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable = new javax.swing.JTable();
-        jButtonSalvar = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jButtonDeletar = new javax.swing.JButton();
-        jButtonLimpar = new javax.swing.JButton();
         jButtonAdicionar = new javax.swing.JButton();
         jButtonExportar = new javax.swing.JButton();
         jButtonImportar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID", "Nome", "Email"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        jTable.setModel(jTableModel);
         jScrollPane1.setViewportView(jTable);
-        if (jTable.getColumnModel().getColumnCount() > 0) {
-            jTable.getColumnModel().getColumn(0).setResizable(false);
-            jTable.getColumnModel().getColumn(1).setResizable(false);
-            jTable.getColumnModel().getColumn(2).setResizable(false);
-        }
-
-        jButtonSalvar.setText("Salvar");
-        jButtonSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonSalvarMouseClicked(evt);
-            }
-        });
 
         jButtonDeletar.setText("Deletar");
         jButtonDeletar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButtonDeletarMouseClicked(evt);
-            }
-        });
-
-        jButtonLimpar.setText("Limpar");
-        jButtonLimpar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonLimparMouseClicked(evt);
             }
         });
 
@@ -140,78 +174,65 @@ public class Cliente extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButtonDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField2)
-                        .addGap(13, 13, 13)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                            .addComponent(jTextField1))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButtonSalvar)
-                        .addGap(46, 46, 46)
-                        .addComponent(jButtonDeletar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButtonExportar)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButtonImportar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButtonLimpar)
-                                .addGap(37, 37, 37)
-                                .addComponent(jButtonAdicionar)))))
+                            .addComponent(jButtonAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextField3))
+                        .addGap(176, 176, 176)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonImportar, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButtonExportar, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonDeletar)
+                .addGap(26, 26, 26)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jButtonExportar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonSalvar)
-                    .addComponent(jButtonDeletar)
-                    .addComponent(jButtonLimpar)
+                    .addComponent(jButtonImportar)
                     .addComponent(jButtonAdicionar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonExportar)
-                    .addComponent(jButtonImportar))
                 .addGap(15, 15, 15))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonSalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonSalvarMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonSalvarMouseClicked
-
     private void jButtonDeletarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDeletarMouseClicked
-        // TODO add your handling code here:
+        this.deletar();
     }//GEN-LAST:event_jButtonDeletarMouseClicked
 
-    private void jButtonLimparMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLimparMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonLimparMouseClicked
-
     private void jButtonAdicionarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAdicionarMouseClicked
-        // TODO add your handling code here:
+        this.adicionar();
     }//GEN-LAST:event_jButtonAdicionarMouseClicked
 
     private void jButtonExportarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonExportarMouseClicked
-        exportar();
+        this.exportar();
     }//GEN-LAST:event_jButtonExportarMouseClicked
 
     private void jButtonImportarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonImportarMouseClicked
-        importar();
+        this.importar();
     }//GEN-LAST:event_jButtonImportarMouseClicked
 
     /**
@@ -254,8 +275,6 @@ public class Cliente extends javax.swing.JFrame {
     private javax.swing.JButton jButtonDeletar;
     private javax.swing.JButton jButtonExportar;
     private javax.swing.JButton jButtonImportar;
-    private javax.swing.JButton jButtonLimpar;
-    private javax.swing.JButton jButtonSalvar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable;
     private javax.swing.JTextField jTextField1;

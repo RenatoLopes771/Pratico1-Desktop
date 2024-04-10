@@ -14,17 +14,27 @@ public class BasePessoa {
     protected String nome;
     protected String email;
 
-    BasePessoa() {
+    public static final String COL1 = "ID";
+    public static final String COL2 = "Nome";
+    public static final String COL3 = "Email";
+
+    public BasePessoa() {
         this.ID = 0;
         this.nome = "";
         this.email = "";
+    }
+
+    public BasePessoa(int ID, String nome, String email) {
+        this.ID = ID;
+        this.nome = nome;
+        this.email = email;
     }
 
     public int getID() {
         return ID;
     }
 
-    protected void setID(int ID) {
+    public void setID(int ID) {
         this.ID = ID;
     }
 

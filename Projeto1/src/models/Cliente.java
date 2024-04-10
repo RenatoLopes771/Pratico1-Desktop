@@ -9,5 +9,4 @@ package models;
  * @author jogos
  */
 public class Cliente extends BasePessoa {
-
 }

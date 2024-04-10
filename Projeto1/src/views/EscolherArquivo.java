@@ -4,11 +4,8 @@
  */
 package views;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.swing.JFileChooser;
 
 /**
@@ -17,43 +14,20 @@ import javax.swing.JFileChooser;
  */
 public class EscolherArquivo {
 
-    File arquivo = null;
-    String pastainicial;
+    JFileChooser fileChooser;
 
     public EscolherArquivo() {
-        this.pastainicial = System.getProperty("user.home");
     }
 
-    public EscolherArquivo(String pastaInicial) {
-        this.pastainicial = pastaInicial;
-    }
+    public File AbreArquivo(String pastainicial) throws IOException {
 
-    public void AbreArquivo() throws IOException {
-
-        JFileChooser fileChooser = new JFileChooser(pastainicial);
+        File arquivo;
+        fileChooser = new JFileChooser(pastainicial);
 
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            arquivo = fileChooser.getSelectedFile();
+            return fileChooser.getSelectedFile();
+        } else {
+            return null;
         }
-    }
-
-    public ArrayList LerArquivo() throws IOException {
-        BufferedReader bufferedReader = null;
-
-        AbreArquivo();
-
-        bufferedReader = new BufferedReader(new FileReader(arquivo));
-
-        ArrayList<String> linhas = new ArrayList<String>();
-
-        while (bufferedReader.ready()) {
-            linhas.add(
-                    bufferedReader.readLine()
-            );
-        }
-
-        bufferedReader.close();
-
-        return linhas;
     }
 }
