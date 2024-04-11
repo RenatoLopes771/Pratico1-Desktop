@@ -21,7 +21,7 @@ public class Cliente {
     private final int EMAIL_INDEX = 2;
     
     public Cliente() {
-        this.fileController = new FileController("user.home\\Documents\\Programação Dekstop\\Pratico1-Desktop"); // #TODO DEBUG
+        this.fileController = new FileController("user.home");
     }
     
     public Cliente(String path) {

@@ -20,7 +20,7 @@ public class Produto {
     private final int PRECO_INDEX = 2;
 
     public Produto() {
-        this.fileController = new FileController("user.home\\Documents\\Programação Dekstop\\Pratico1-Desktop"); // #TODO DEBUG
+        this.fileController = new FileController("user.home");
     }
 
     public Produto(String path) {
