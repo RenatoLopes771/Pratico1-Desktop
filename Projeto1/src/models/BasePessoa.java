@@ -8,14 +8,10 @@ package models;
  *
  * @author Usuario
  */
-public class BasePessoa {
+public class BasePessoa extends BaseEntidade {
 
-    protected int ID;
-    protected String nome;
     protected String email;
 
-    public static final String COL1 = "ID";
-    public static final String COL2 = "Nome";
     public static final String COL3 = "Email";
 
     public BasePessoa() {
@@ -28,22 +24,6 @@ public class BasePessoa {
         this.ID = ID;
         this.nome = nome;
         this.email = email;
-    }
-
-    public int getID() {
-        return ID;
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public String getEmail() {

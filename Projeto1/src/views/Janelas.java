@@ -34,6 +34,10 @@ public class Janelas extends javax.swing.JFrame {
     }
     
     private void produtos() {
+        Produto produto = new Produto();
+        
+        produto.setVisible(true);
+        
         this.dispose();
     }
 

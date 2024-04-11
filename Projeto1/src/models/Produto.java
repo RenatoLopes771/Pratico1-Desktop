@@ -8,6 +8,29 @@ package models;
  *
  * @author jogos
  */
-public class Produto {
+public class Produto extends BaseEntidade {
 
+    protected double preco;
+
+    public static final String COL3 = "Preço";
+
+    public Produto() {
+        this.ID = 0;
+        this.nome = "";
+        this.preco = 0;
+    }
+
+    public Produto(int ID, String nome, double preco) {
+        this.ID = ID;
+        this.nome = nome;
+        this.preco = preco;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
 }
