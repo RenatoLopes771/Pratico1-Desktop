@@ -8,8 +8,10 @@ package models;
  *
  * @author Usuario
  */
-public class BasePessoa extends BaseEntidade {
-
+public class BasePessoa extends BaseEntidade implements java.io.Serializable {
+    
+    private static final long serialVersionUID = 10L;
+    
     protected String email;
 
     public static final String COL3 = "Email";

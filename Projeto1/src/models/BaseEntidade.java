@@ -8,8 +8,10 @@ package models;
  *
  * @author Usuario
  */
-public class BaseEntidade {
-
+public class BaseEntidade implements java.io.Serializable {
+    
+    private static final long serialVersionUID = 20L;
+    
     protected int ID;
     protected String nome;
 

@@ -1,2 +1,0 @@
-1;dsa;dsa@dsa.com;123.222
-2;dsa;dsa@dso.com;123.0
