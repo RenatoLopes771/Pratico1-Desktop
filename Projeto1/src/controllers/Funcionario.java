@@ -19,6 +19,7 @@ public class Funcionario {
     private final int ID_INDEX = 0;
     private final int NOME_INDEX = 1;
     private final int EMAIL_INDEX = 2;
+    private final int RECESSO_INDEX = 3;
 
     public Funcionario() {
         this.fileController = new FileController("user.home");
@@ -44,6 +45,7 @@ public class Funcionario {
             funcionario.setID(Integer.parseInt(lista.get(ID_INDEX)));
             funcionario.setNome(lista.get(NOME_INDEX));
             funcionario.setEmail(lista.get(EMAIL_INDEX));
+            funcionario.setRecesso(Boolean.parseBoolean(lista.get(RECESSO_INDEX)));
 
             conteudoRetornar.add(funcionario);
         }
@@ -61,14 +63,16 @@ public class Funcionario {
             String ID = "" + funcionario.getID();
             String nome = funcionario.getNome();
             String email = funcionario.getEmail();
+            String recesso = "" + funcionario.getRecesso();
 
-            if (emailEIDJaExisteOuInvalido(ID, nome, email, conteudoexportar)) {
+            if (emailEIDJaExisteOuInvalido(ID, nome, email, recesso, conteudoexportar)) {
                 return false;
             }
 
             funcionarioexportar.add(ID);
             funcionarioexportar.add(nome);
             funcionarioexportar.add(email);
+            funcionarioexportar.add(recesso);
 
             conteudoexportar.add(funcionarioexportar);
         }
@@ -80,6 +84,7 @@ public class Funcionario {
             String ID,
             String nome,
             String email,
+            String recesso,
             ArrayList<ArrayList<String>> conteudo
     ) {
         int index = 1;
@@ -133,5 +138,9 @@ public class Funcionario {
 
     public String getCol3() {
         return models.Funcionario.COL3;
+    }
+    
+    public String getCol4() {
+        return models.Funcionario.COL4;
     }
 }
