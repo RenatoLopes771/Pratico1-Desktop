@@ -19,6 +19,7 @@ public class Cliente {
     private final int ID_INDEX = 0;
     private final int NOME_INDEX = 1;
     private final int EMAIL_INDEX = 2;
+    private final int SCORE_INDEX = 3;
     
     public Cliente() {
         this.fileController = new FileController("user.home");
@@ -44,6 +45,7 @@ public class Cliente {
             cliente.setID(Integer.parseInt(lista.get(ID_INDEX)));
             cliente.setNome(lista.get(NOME_INDEX));
             cliente.setEmail(lista.get(EMAIL_INDEX));
+            cliente.setScore(Double.parseDouble(lista.get(SCORE_INDEX)));
             
             conteudoRetornar.add(cliente);
         }
@@ -61,14 +63,16 @@ public class Cliente {
             String ID = "" + cliente.getID();
             String nome = cliente.getNome();
             String email = cliente.getEmail();
+            String score = "" + cliente.getScore();
             
-            if (emailEIDJaExisteOuInvalido(ID, nome, email, conteudoexportar)) {
+            if (emailEIDJaExisteOuInvalido(ID, nome, email, score, conteudoexportar)) {
                 return false;
             }
             
             clienteexportar.add(ID);
             clienteexportar.add(nome);
             clienteexportar.add(email);
+            clienteexportar.add(score);
             
             conteudoexportar.add(clienteexportar);
         }
@@ -80,6 +84,7 @@ public class Cliente {
             String ID,
             String nome,
             String email,
+            String score,
             ArrayList<ArrayList<String>> conteudo
     ) {
         int index = 1;
@@ -133,5 +138,9 @@ public class Cliente {
     
     public String getCol3() {
         return models.Cliente.COL3;
+    }
+    
+    public String getCol4() {
+        return models.Cliente.COL4;
     }
 }
