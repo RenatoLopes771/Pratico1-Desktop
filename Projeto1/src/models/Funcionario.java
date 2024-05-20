@@ -8,7 +8,10 @@ package models;
  *
  * @author jogos
  */
-public class Funcionario extends BasePessoa {
+public class Funcionario extends BasePessoa implements java.io.Serializable {
+    
+    private static final long serialVersionUID = 2L;
+    
     protected boolean recesso;
     
     public static final String COL4 = "Recesso";

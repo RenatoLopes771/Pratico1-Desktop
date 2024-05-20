@@ -4,6 +4,12 @@
  */
 package controllers;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import views.ErroPrompt;
 import utilities.Util;
@@ -30,102 +36,79 @@ public class Funcionario {
     }
 
     public ArrayList<models.Funcionario> importar() {
-        ArrayList<ArrayList<String>> conteudoLido;
-        ArrayList<models.Funcionario> conteudoRetornar = new ArrayList<models.Funcionario>();
+        ArrayList<models.Funcionario> conteudoRetornar;
+        ObjectInputStream ois;
 
-        conteudoLido = fileController.importar();
+        try {
+            File arquivo = fileController.getArquivo();
 
-        if (conteudoLido == null) {
-            return null;
-        }
+            ois = new ObjectInputStream(
+                    new FileInputStream(arquivo)
+            );
 
-        for (ArrayList<String> lista : conteudoLido) {
-            models.Funcionario funcionario = new models.Funcionario();
+            conteudoRetornar = (ArrayList<models.Funcionario>) ois.readObject();
+            ois.close();
 
-            funcionario.setID(Integer.parseInt(lista.get(ID_INDEX)));
-            funcionario.setNome(lista.get(NOME_INDEX));
-            funcionario.setEmail(lista.get(EMAIL_INDEX));
-            funcionario.setRecesso(Boolean.parseBoolean(lista.get(RECESSO_INDEX)));
-
-            conteudoRetornar.add(funcionario);
+        } catch (IOException e) {
+            ErroPrompt.gerar(e.getLocalizedMessage());
+            conteudoRetornar = null;
+        } catch (ClassNotFoundException e) {
+            ErroPrompt.gerar(e.getLocalizedMessage());
+            conteudoRetornar = null;
+        } catch (Exception e) {
+            ErroPrompt.gerar(e.getLocalizedMessage());
+            conteudoRetornar = null;
         }
 
         return conteudoRetornar;
     }
 
     public boolean exportar(ArrayList<models.Funcionario> conteudo) {
-
-        ArrayList<ArrayList<String>> conteudoexportar = new ArrayList<ArrayList<String>>();
+        ObjectOutputStream oos;
+        Boolean saida = false;
+        ArrayList<String> IDs = new ArrayList<String>();
+        ArrayList<String> emails = new ArrayList<String>();
 
         for (models.Funcionario funcionario : conteudo) {
-            ArrayList<String> funcionarioexportar = new ArrayList<String>();
-
             String ID = "" + funcionario.getID();
             String nome = funcionario.getNome();
             String email = funcionario.getEmail();
-            String recesso = "" + funcionario.getRecesso();
+//            String recesso = "" + funcionario.getRecesso();
 
-            if (emailEIDJaExisteOuInvalido(ID, nome, email, recesso, conteudoexportar)) {
-                return false;
+            if (Util.emailEIDJaExisteOuInvalido(
+                    ID, nome, email, IDs, emails
+            )) {
+                return saida;
             }
 
-            funcionarioexportar.add(ID);
-            funcionarioexportar.add(nome);
-            funcionarioexportar.add(email);
-            funcionarioexportar.add(recesso);
+            IDs.add(ID);
+            emails.add(email);
 
-            conteudoexportar.add(funcionarioexportar);
-        }
+            try {
+                File arquivo = fileController.getArquivo();
 
-        return fileController.exportar(conteudoexportar);
-    }
-
-    private boolean emailEIDJaExisteOuInvalido(
-            String ID,
-            String nome,
-            String email,
-            String recesso,
-            ArrayList<ArrayList<String>> conteudo
-    ) {
-        int index = 1;
-
-        if (!Util.emailEValido(email)) {
-            ErroPrompt.gerar(
-                    "Erro: email invalido.\nEmail: " + email + "\nID: " + ID
-            );
-            return true;
-        }
-
-        if (nome.contains(";") || email.contains(";")) {
-            ErroPrompt.gerar(
-                    "Erro: nome contém \";\".\nNome: " + nome + "\nID: " + ID
-            );
-            return true;
-        }
-
-        for (ArrayList<String> arraylist : conteudo) {
-            String IDAtual = arraylist.get(0);
-            String nomeAtual = arraylist.get(1);
-            String emailAtual = arraylist.get(2);
-
-            if (IDAtual.equals(ID)) {
-                ErroPrompt.gerar(
-                        "Erro: ID já existe.\nID: " + IDAtual + "\nNome: " + nome
+                oos = new ObjectOutputStream(
+                        new FileOutputStream(arquivo)
                 );
-                return true;
-            }
 
-            if (emailAtual.equals(email)) {
+                oos.writeObject(conteudo);
+
+                saida = true;
+
+                oos.close();
+            } catch (IOException e) {
                 ErroPrompt.gerar(
-                        "Erro: email já está cadastrado.\nEmail: " + emailAtual + "\nID: " + ID
+                        "Erro IOException: " + e.getLocalizedMessage()
+                        + "\nVocê está tentando salvar sobre um arquivo já escrito?"
                 );
-                return true;
+                saida = false;
+            } catch (Exception e) {
+                ErroPrompt.gerar(e.getLocalizedMessage());
+                saida = false;
             }
-
-            index++;
         }
-
-        return false;
+        
+        return saida;
     }
 
     public String getCol1() {

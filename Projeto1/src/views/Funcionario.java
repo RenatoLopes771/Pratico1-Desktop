@@ -152,7 +152,6 @@ public class Funcionario extends javax.swing.JFrame {
         try {
             for (int i = 0; i < jTable.getRowCount(); i++) {
                 if (Integer.parseInt("" + jTable.getValueAt(i, 0)) == ID) {
-                    System.out.println(ID + " " + i);
                     jTable.changeSelection(i, 0, false, false);
                     return;
                 }
@@ -181,7 +180,7 @@ public class Funcionario extends javax.swing.JFrame {
                     break;
 
                 default:
-                    ErroPrompt.gerar("Erro: valor \"Recesso\" inválido.\nID: " + ID);
+                    ErroPrompt.gerar("Erro: valor \"Recesso\" inválido.\nValores válidos: Sim/Não\nID: " + ID);
                    return;
             }
 
