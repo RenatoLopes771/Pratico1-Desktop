@@ -8,7 +8,9 @@ package models;
  *
  * @author jogos
  */
-public class Produto extends BaseEntidade {
+public class Produto extends BaseEntidade implements java.io.Serializable {
+    
+    private static final long serialVersionUID = 3L;
 
     protected double preco;
 

@@ -22,11 +22,6 @@ public class Funcionario {
 
     private final FileController fileController;
 
-    private final int ID_INDEX = 0;
-    private final int NOME_INDEX = 1;
-    private final int EMAIL_INDEX = 2;
-    private final int RECESSO_INDEX = 3;
-
     public Funcionario() {
         this.fileController = new FileController("user.home");
     }

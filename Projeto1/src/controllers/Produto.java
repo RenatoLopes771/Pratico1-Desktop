@@ -4,6 +4,12 @@
  */
 package controllers;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import views.ErroPrompt;
 
@@ -15,10 +21,6 @@ public class Produto {
 
     private final FileController fileController;
 
-    private final int ID_INDEX = 0;
-    private final int NOME_INDEX = 1;
-    private final int PRECO_INDEX = 2;
-
     public Produto() {
         this.fileController = new FileController("user.home");
     }
@@ -28,83 +30,83 @@ public class Produto {
     }
 
     public ArrayList<models.Produto> importar() {
-        ArrayList<ArrayList<String>> conteudoLido;
-        ArrayList<models.Produto> conteudoRetornar = new ArrayList<models.Produto>();
+        ArrayList<models.Produto> conteudoRetornar;
+        ObjectInputStream ois;
 
-        conteudoLido = fileController.importar();
+        try {
+            File arquivo = fileController.getArquivo();
 
-        if (conteudoLido == null) {
-            return null;
-        }
+            ois = new ObjectInputStream(
+                    new FileInputStream(arquivo)
+            );
 
-        for (ArrayList<String> lista : conteudoLido) {
-            models.Produto produto = new models.Produto();
+            conteudoRetornar = (ArrayList<models.Produto>) ois.readObject();
+            ois.close();
 
-            produto.setID(Integer.parseInt(lista.get(ID_INDEX)));
-            produto.setNome(lista.get(NOME_INDEX));
-            produto.setPreco(Double.parseDouble(lista.get(PRECO_INDEX)));
-
-            conteudoRetornar.add(produto);
+        } catch (IOException e) {
+            ErroPrompt.gerar(e.getLocalizedMessage());
+            conteudoRetornar = null;
+        } catch (ClassNotFoundException e) {
+            ErroPrompt.gerar(e.getLocalizedMessage());
+            conteudoRetornar = null;
+        } catch (Exception e) {
+            ErroPrompt.gerar(e.getLocalizedMessage());
+            conteudoRetornar = null;
         }
 
         return conteudoRetornar;
     }
 
     public boolean exportar(ArrayList<models.Produto> conteudo) {
-
-        ArrayList<ArrayList<String>> conteudoexportar = new ArrayList<ArrayList<String>>();
+        ObjectOutputStream oos;
+        Boolean saida = false;
+        ArrayList<String> IDs = new ArrayList<String>();
 
         for (models.Produto produto : conteudo) {
-            ArrayList<String> produtoexportar = new ArrayList<String>();
-
             String ID = "" + produto.getID();
             String nome = produto.getNome();
-            String preco = "" + produto.getPreco();
+//            String preco = "" + produto.getPreco();
 
-            if (IDJaExisteOuInvalido(ID, nome, preco, conteudoexportar)) {
+            if (nome.contains(";")) {
+                ErroPrompt.gerar(
+                        "Erro: nome contém \";\".\nNome: " + nome + "\nID: " + ID
+                );
                 return false;
             }
 
-            produtoexportar.add(ID);
-            produtoexportar.add(nome);
-            produtoexportar.add(preco);
-
-            conteudoexportar.add(produtoexportar);
-        }
-
-        return fileController.exportar(conteudoexportar);
-    }
-
-    private boolean IDJaExisteOuInvalido(
-            String ID,
-            String nome,
-            String preco,
-            ArrayList<ArrayList<String>> conteudo
-    ) {
-        int index = 1;
-
-        if (nome.contains(";")) {
-            ErroPrompt.gerar(
-                    "Erro: nome contém \";\".\nNome: " + nome + "\nID: " + ID
-            );
-            return true;
-        }
-
-        for (ArrayList<String> arraylist : conteudo) {
-            String IDAtual = arraylist.get(0);
-            String nomeAtual = arraylist.get(1);
-
-            if (IDAtual.equals(ID)) {
+            if (IDs.contains(ID)) {
                 ErroPrompt.gerar(
-                        "Erro: ID já existe.\nID: " + IDAtual + "\nNome: " + nome
+                        "Erro: ID já existe\nID: " + ID
                 );
-                return true;
+                return false;
             }
 
-            index++;
+            IDs.add(ID);
         }
 
-        return false;
+        try {
+            File arquivo = fileController.getArquivo();
+
+            oos = new ObjectOutputStream(
+                    new FileOutputStream(arquivo)
+            );
+
+            oos.writeObject(conteudo);
+
+            saida = true;
+
+            oos.close();
+        } catch (IOException e) {
+            ErroPrompt.gerar(
+                    "Erro IOException: " + e.getLocalizedMessage()
+                    + "\nVocê está tentando salvar sobre um arquivo já escrito?"
+            );
+            saida = false;
+        } catch (Exception e) {
+            ErroPrompt.gerar(e.getLocalizedMessage());
+            saida = false;
+        }
+        return saida;
     }
 
     public String getCol1() {
